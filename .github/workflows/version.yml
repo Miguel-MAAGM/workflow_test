@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write   # 👈 necesario para poder hacer push y crear tags
+
 jobs:
   bump-version:
     runs-on: ubuntu-latest
@@ -13,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0   # necesitamos todo el historial para tags
+          fetch-depth: 0
 
       - name: Setup Git for push
         run: |
@@ -40,7 +43,7 @@ jobs:
           elif [[ "${{ steps.branch.outputs.source_branch }}" == hotfix/* ]]; then
             patch=$((patch+1))
           else
-            patch=$((patch+1)) # fallback
+            patch=$((patch+1))
           fi
 
           new_version="$major.$minor.$patch"
